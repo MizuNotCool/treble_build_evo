@@ -11,7 +11,7 @@ echo
 set -e
 
 BL=$PWD/treble_build_evo
-BD=$HOME/builds
+BD=/tmp/itzkaguya/builds
 
 initRepos() {
     if [ ! -d .repo ]; then
@@ -67,28 +67,19 @@ buildTrebleApp() {
 }
 
 buildVariant() {
-    echo "--> Building treble_arm64_bvN"
-    lunch treble_arm64_bvN-userdebug
+    echo "--> Building treble_a64_bvN"
+    lunch treble_a64_bvN-userdebug
     make -j$(nproc --all) installclean
     make -j$(nproc --all) systemimage
-    mv $OUT/system.img $BD/system-treble_arm64_bvN.img
-    echo
-}
-
-buildSlimVariant() {
-    echo "--> Building treble_arm64_bvN-slim"
-    (cd vendor/evolution && git am $BL/patches/slim.patch)
-    make -j$(nproc --all) systemimage
-    (cd vendor/evolution && git reset --hard HEAD~1)
-    mv $OUT/system.img $BD/system-treble_arm64_bvN-slim.img
+    mv $OUT/system.img $BD/system-treble_a64_bvN.img
     echo
 }
 
 buildVndkliteVariant() {
-    echo "--> Building treble_arm64_bvN-vndklite"
+    echo "--> Building treble_a64_bvN-vndklite"
     cd sas-creator
-    sudo bash lite-adapter.sh 64 $BD/system-treble_arm64_bvN.img
-    cp s.img $BD/system-treble_arm64_bvN-vndklite.img
+    sudo bash lite-adapter.sh 64 $BD/system-treble_a64_bvN.img
+    cp s.img $BD/system-treble_a64_bvN-vndklite.img
     sudo rm -rf s.img d tmp
     cd ..
     echo
@@ -96,9 +87,8 @@ buildVndkliteVariant() {
 
 generatePackages() {
     echo "--> Generating packages"
-    xz -cv $BD/system-treble_arm64_bvN.img -T0 > $BD/evolution_arm64-ab-7.3-$BUILD_DATE.img.xz
-    xz -cv $BD/system-treble_arm64_bvN-vndklite.img -T0 > $BD/evolution_arm64-ab-vndklite-7.3-$BUILD_DATE.img.xz
-    xz -cv $BD/system-treble_arm64_bvN-slim.img -T0 > $BD/evolution_arm64-ab-slim-7.3-$BUILD_DATE.img.xz
+    xz -cv $BD/system-treble_a64_bvN.img -T0 > $BD/evolution_a64-ab-7.3-ItzKaguya.img.xz
+    xz -cv $BD/system-treble_a64_bvN-vndklite.img -T0 > $BD/evolution_a64-ab-vndklite-7.3-ItzKaguya.img.xz
     rm -rf $BD/system-*.img
     echo
 }
@@ -112,7 +102,6 @@ applyPatches
 setupEnv
 buildTrebleApp
 buildVariant
-buildSlimVariant
 buildVndkliteVariant
 generatePackages
 
