@@ -3,7 +3,7 @@ $(call inherit-product, vendor/evolution/config/BoardConfigSoong.mk)
 $(call inherit-product, device/evolution/sepolicy/common/sepolicy.mk)
 -include vendor/evolution/build/core/config.mk
 
-TARGET_BOOT_ANIMATION_RES := 1080
+TARGET_BOOT_ANIMATION_RES := 720
 
 TARGET_SUPPORTS_QUICK_TAP := true
 
@@ -15,4 +15,4 @@ PRODUCT_PACKAGES += \
     libaptXHD_encoder
 
 PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
-    ro.system.ota.json_url=https://raw.githubusercontent.com/ponces/treble_build_evo/tiramisu/ota.json
+    ro.system.ota.json_url=https://raw.githubusercontent.com/MizuNotCool/treble_build_evo/tiramisu/ota.json
